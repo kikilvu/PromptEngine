@@ -174,6 +174,18 @@ export function registerChatLibChatParticipant(context: vscode.ExtensionContext)
 			// 显示处理时间
 			stream.markdown(`\n---\n> ⏱️ 处理时间: ${augmentedResult.metadata.processingTime}ms\n`);
 
+			// 注册发送到 Copilot Chat 的命令
+			const disposable = vscode.commands.registerCommand('chat-tools-sample.sendToCopilotChat', async () => {
+				await vscode.commands.executeCommand('workbench.action.chat.open', augmentedResult.augmentedPrompt);
+			});
+			context.subscriptions.push(disposable);
+
+			// 添加发送到 Copilot Chat 的按钮
+			stream.button({
+				title: '发送到 Copilot Chat',
+				command: 'chat-tools-sample.sendToCopilotChat'
+			});
+
 		} catch (err) {
 			if (err instanceof Error) {
 				stream.markdown(`❌ **错误**: ${err.message}`);
